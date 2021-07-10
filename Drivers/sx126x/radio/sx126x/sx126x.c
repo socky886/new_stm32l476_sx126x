@@ -31,7 +31,8 @@
 /*!
  * \brief Internal frequency of the radio
  */
-#define SX126X_XTAL_FREQ                            32000000UL
+// #define SX126X_XTAL_FREQ                            32000000UL
+#define SX126X_XTAL_FREQ                            26000000UL
 
 /*!
  * \brief Scaling factor used to perform fixed-point operations

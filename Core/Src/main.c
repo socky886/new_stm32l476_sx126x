@@ -74,7 +74,7 @@ int fputc(int ch, FILE *f)
 }
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  printf("IRQ\n");
+  // printf("IRQ\n");
 }
 /* USER CODE END 0 */
 
@@ -85,7 +85,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  uint8_t xx[] =      {0x09, 0x12, 0x22, 0x32, 0x42, 0x52, 0x62, 0x72, 0x82, 0x92, 0x5d, 0xd6};
+  //                    0xcc  0x67  0xaf  0x96  0x64  0x30  0x9c  //seed is 0xffff
+  //                    0x71  0x8e  0xca  0xda  0x5b  0x60  0x40  //seed is 0x02ff
+  //                    0x71  0x8e  0xda  0xda  0x5a  0x76  0x40  //seed is 0x01ff
+  //                    0x71  0x8e  0xda  0xda  0x1b  0x62  0x40  //seed is 0x0000
+   
 
+   //                        0x71  0x8e  0xca  0xda  0x7b  0x66  0x00  0x87  0x4a
+   //                        0x71  0x8e  0xde  0xda  0x5b  0x62  0x40  0x87  0x4e  
+  //                         0x71  0x8e  0xde  0xda  0x5b  0x66  0x40  0x87  0x4a 
+  uint8_t xordata[] = {0x01, 0x71, 0x8e, 0xca, 0xda, 0x7b, 0x66, 0x00, 0x87, 0x4a,  0x01, 0x02};
+  int i;
+  uint16_t crc;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -111,6 +123,7 @@ int main(void)
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
   packet_init();
+  // tx_cw();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,8 +133,23 @@ int main(void)
     // register_test();
     // printf("transmit packet\n");
     // packet_tx();
-    // HAL_Delay(200);
-    packet_rx();
+    fix_lenth_packet_tx_crc_whiten();
+    // crc=crc16(xx,10);
+    // printf("the crc is 0x%02x, 0x%02x\n",crc>>8,crc&0xff);
+    HAL_Delay(200);
+    // for(i=2000;i<=65535;i++)
+    // {
+    //   printf("the seed is %d\n",i);
+    //   SX126xSetWhiteningSeed( i );
+
+      packet_rx();
+    // }
+    // while(1);
+    // fix_len_packet_rx();
+    // for(i=0;i<12;i++)
+    // {
+    //   printf("0x%02x,",xx[i]^xordata[i]);
+    // }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

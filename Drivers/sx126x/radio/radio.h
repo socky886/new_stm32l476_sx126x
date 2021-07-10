@@ -247,6 +247,12 @@ struct Radio_s
                               uint8_t coderate, uint16_t preambleLen,
                               bool fixLen, bool crcOn, bool freqHopOn,
                               uint8_t hopPeriod, bool iqInverted, uint32_t timeout );
+
+    void (*SetTxConfig_jf)(RadioModems_t modem, int8_t power, uint32_t fdev,
+                           uint32_t bandwidth, uint32_t datarate,
+                           uint8_t coderate, uint16_t preambleLen,
+                           bool fixLen, bool crcOn, bool freqHopOn,
+                           uint8_t hopPeriod, bool iqInverted, uint32_t timeout);
     /*!
      * \brief Checks if the given RF frequency is supported by the hardware
      *

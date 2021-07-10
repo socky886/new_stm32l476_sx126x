@@ -2,7 +2,7 @@
 
 "C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\bin\armstlink2.dll" 
 
-"E:\stm32l476_sx126x\EWARM\stm32l476_sx126x\Exe\stm32l476_sx126x.out" 
+"E:\new_stm32l476_sx126x\EWARM\stm32l476_sx126x\Exe\stm32l476_sx126x.out" 
 
 --plugin "C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\bin\armbat.dll" 
 

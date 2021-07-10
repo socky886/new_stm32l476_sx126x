@@ -172,6 +172,12 @@ void RadioSetTxConfig( RadioModems_t modem, int8_t power, uint32_t fdev,
                           bool fixLen, bool crcOn, bool FreqHopOn,
                           uint8_t HopPeriod, bool iqInverted, uint32_t timeout );
 
+void RadioSetTxConfig_jf( RadioModems_t modem, int8_t power, uint32_t fdev,
+                          uint32_t bandwidth, uint32_t datarate,
+                          uint8_t coderate, uint16_t preambleLen,
+                          bool fixLen, bool crcOn, bool FreqHopOn,
+                          uint8_t HopPeriod, bool iqInverted, uint32_t timeout );
+
 /*!
  * \brief Checks if the given RF frequency is supported by the hardware
  *
@@ -356,6 +362,7 @@ const struct Radio_s Radio =
     RadioRandom,
     RadioSetRxConfig,
     RadioSetTxConfig,
+    RadioSetTxConfig_jf,
     RadioCheckRfFrequency,
     RadioTimeOnAir,
     RadioSend,
@@ -665,32 +672,39 @@ void RadioSetRxConfig( RadioModems_t modem, uint32_t bandwidth,
             SX126x.ModulationParams.PacketType = PACKET_TYPE_GFSK;
 
             SX126x.ModulationParams.Params.Gfsk.BitRate = datarate;
-            SX126x.ModulationParams.Params.Gfsk.ModulationShaping = MOD_SHAPING_G_BT_1;
+            // SX126x.ModulationParams.Params.Gfsk.ModulationShaping = MOD_SHAPING_G_BT_1;
+            SX126x.ModulationParams.Params.Gfsk.ModulationShaping = MOD_SHAPING_G_BT_05;
             SX126x.ModulationParams.Params.Gfsk.Bandwidth = RadioGetFskBandwidthRegValue( bandwidth << 1 ); // SX126x badwidth is double sided
 
             SX126x.PacketParams.PacketType = PACKET_TYPE_GFSK;
             SX126x.PacketParams.Params.Gfsk.PreambleLength = ( preambleLen << 3 ); // convert byte into bit
             SX126x.PacketParams.Params.Gfsk.PreambleMinDetect = RADIO_PREAMBLE_DETECTOR_08_BITS;
-            SX126x.PacketParams.Params.Gfsk.SyncWordLength = 3 << 3; // convert byte into bit
+            SX126x.PacketParams.Params.Gfsk.SyncWordLength = 2 << 3; // convert byte into bit
             SX126x.PacketParams.Params.Gfsk.AddrComp = RADIO_ADDRESSCOMP_FILT_OFF;
             SX126x.PacketParams.Params.Gfsk.HeaderType = ( fixLen == true ) ? RADIO_PACKET_FIXED_LENGTH : RADIO_PACKET_VARIABLE_LENGTH;
             SX126x.PacketParams.Params.Gfsk.PayloadLength = MaxPayloadLength;
             if( crcOn == true )
             {
-                SX126x.PacketParams.Params.Gfsk.CrcLength = RADIO_CRC_2_BYTES_CCIT;
+                // SX126x.PacketParams.Params.Gfsk.CrcLength = RADIO_CRC_2_BYTES_CCIT;
+                SX126x.PacketParams.Params.Gfsk.CrcLength = RADIO_CRC_2_BYTES_IBM;
             }
             else
             {
                 SX126x.PacketParams.Params.Gfsk.CrcLength = RADIO_CRC_OFF;
             }
-            SX126x.PacketParams.Params.Gfsk.DcFree = RADIO_DC_FREEWHITENING;
+            SX126x.PacketParams.Params.Gfsk.DcFree = RADIO_DC_FREEWHITENING; //RADIO_DC_FREE_OFF
+            // SX126x.PacketParams.Params.Gfsk.DcFree = RADIO_DC_FREE_OFF;
+
 
             RadioStandby( );
             RadioSetModem( ( SX126x.ModulationParams.PacketType == PACKET_TYPE_GFSK ) ? MODEM_FSK : MODEM_LORA );
             SX126xSetModulationParams( &SX126x.ModulationParams );
             SX126xSetPacketParams( &SX126x.PacketParams );
-            SX126xSetSyncWord( ( uint8_t[] ){ 0xC1, 0x94, 0xC1, 0x00, 0x00, 0x00, 0x00, 0x00 } );
+            SX126xSetSyncWord( ( uint8_t[] ){ 0x2D, 0xD4, 0xC1, 0x00, 0x00, 0x00, 0x00, 0x00 } );
             SX126xSetWhiteningSeed( 0x01FF );
+            // SX126xSetWhiteningSeed( 0x0000 );
+            // SX126xSetWhiteningSeed( 0x50FF );
+            // SX126xSetWhiteningSeed( 0xFFFF );
 
             RxTimeout = ( uint32_t )symbTimeout * 8000UL / datarate;
             break;
@@ -774,33 +788,41 @@ void RadioSetTxConfig( RadioModems_t modem, int8_t power, uint32_t fdev,
             SX126x.ModulationParams.PacketType = PACKET_TYPE_GFSK;
             SX126x.ModulationParams.Params.Gfsk.BitRate = datarate;
 
-            SX126x.ModulationParams.Params.Gfsk.ModulationShaping = MOD_SHAPING_G_BT_1;
+            // SX126x.ModulationParams.Params.Gfsk.ModulationShaping = MOD_SHAPING_G_BT_1;
+            SX126x.ModulationParams.Params.Gfsk.ModulationShaping = MOD_SHAPING_G_BT_05;
             SX126x.ModulationParams.Params.Gfsk.Bandwidth = RadioGetFskBandwidthRegValue( bandwidth << 1 ); // SX126x badwidth is double sided
             SX126x.ModulationParams.Params.Gfsk.Fdev = fdev;
 
             SX126x.PacketParams.PacketType = PACKET_TYPE_GFSK;
             SX126x.PacketParams.Params.Gfsk.PreambleLength = ( preambleLen << 3 ); // convert byte into bit
             SX126x.PacketParams.Params.Gfsk.PreambleMinDetect = RADIO_PREAMBLE_DETECTOR_08_BITS;
-            SX126x.PacketParams.Params.Gfsk.SyncWordLength = 3 << 3 ; // convert byte into bit
+            SX126x.PacketParams.Params.Gfsk.SyncWordLength = 2 << 3 ; // convert byte into bit
             SX126x.PacketParams.Params.Gfsk.AddrComp = RADIO_ADDRESSCOMP_FILT_OFF;
             SX126x.PacketParams.Params.Gfsk.HeaderType = ( fixLen == true ) ? RADIO_PACKET_FIXED_LENGTH : RADIO_PACKET_VARIABLE_LENGTH;
 
             if( crcOn == true )
             {
-                SX126x.PacketParams.Params.Gfsk.CrcLength = RADIO_CRC_2_BYTES_CCIT;
+                // SX126x.PacketParams.Params.Gfsk.CrcLength = RADIO_CRC_2_BYTES_CCIT;
+                SX126x.PacketParams.Params.Gfsk.CrcLength = RADIO_CRC_2_BYTES_IBM;
+
             }
             else
             {
                 SX126x.PacketParams.Params.Gfsk.CrcLength = RADIO_CRC_OFF;
             }
-            SX126x.PacketParams.Params.Gfsk.DcFree = RADIO_DC_FREEWHITENING;
+            // SX126x.PacketParams.Params.Gfsk.DcFree = RADIO_DC_FREEWHITENING;
+            SX126x.PacketParams.Params.Gfsk.DcFree = RADIO_DC_FREE_OFF;
 
             RadioStandby( );
             RadioSetModem( ( SX126x.ModulationParams.PacketType == PACKET_TYPE_GFSK ) ? MODEM_FSK : MODEM_LORA );
             SX126xSetModulationParams( &SX126x.ModulationParams );
             SX126xSetPacketParams( &SX126x.PacketParams );
-            SX126xSetSyncWord( ( uint8_t[] ){ 0xC1, 0x94, 0xC1, 0x00, 0x00, 0x00, 0x00, 0x00 } );
+            SX126xSetSyncWord( ( uint8_t[] ){ 0x2D, 0xD4, 0xC1, 0x00, 0x00, 0x00, 0x00, 0x00 } );
             SX126xSetWhiteningSeed( 0x01FF );
+            // SX126xSetWhiteningSeed( 0x0000 );
+            // SX126xSetWhiteningSeed( 0x50FF );
+            // SX126xSetWhiteningSeed( 0xFFFF );
+            // SX126xSetWhiteningSeed( 0x10FF );
             break;
 
         case MODEM_LORA:
@@ -863,6 +885,54 @@ void RadioSetTxConfig( RadioModems_t modem, int8_t power, uint32_t fdev,
 
     SX126xSetRfTxPower( power );
     TxTimeout = timeout;
+}
+
+void RadioSetTxConfig_jf( RadioModems_t modem, int8_t power, uint32_t fdev,
+                        uint32_t bandwidth, uint32_t datarate,
+                        uint8_t coderate, uint16_t preambleLen,
+                        bool fixLen, bool crcOn, bool freqHopOn,
+                        uint8_t hopPeriod, bool iqInverted, uint32_t timeout )
+{
+
+   
+        // SX126x.ModulationParams.PacketType = PACKET_TYPE_GFSK;
+        // SX126x.ModulationParams.Params.Gfsk.BitRate = datarate;
+
+        // // SX126x.ModulationParams.Params.Gfsk.ModulationShaping = MOD_SHAPING_G_BT_1;
+        // SX126x.ModulationParams.Params.Gfsk.ModulationShaping = MOD_SHAPING_G_BT_05;
+        // SX126x.ModulationParams.Params.Gfsk.Bandwidth = RadioGetFskBandwidthRegValue( bandwidth << 1 ); // SX126x badwidth is double sided
+        // SX126x.ModulationParams.Params.Gfsk.Fdev = fdev;
+
+        //SX126x.PacketParams.PacketType = PACKET_TYPE_GFSK;
+        //SX126x.PacketParams.Params.Gfsk.PreambleLength = ( preambleLen << 3 ); // convert byte into bit
+        //SX126x.PacketParams.Params.Gfsk.PreambleMinDetect = RADIO_PREAMBLE_DETECTOR_08_BITS;
+        ///SX126x.PacketParams.Params.Gfsk.SyncWordLength = 2 << 3 ; // convert byte into bit
+        //SX126x.PacketParams.Params.Gfsk.AddrComp = RADIO_ADDRESSCOMP_FILT_OFF;
+        SX126x.PacketParams.Params.Gfsk.HeaderType = RADIO_PACKET_FIXED_LENGTH ;// RADIO_PACKET_VARIABLE_LENGTH;
+        //SX126x.PacketParams.Params.Gfsk.CrcLength = RADIO_CRC_2_BYTES_IBM;
+
+       
+        // SX126x.PacketParams.Params.Gfsk.DcFree = RADIO_DC_FREEWHITENING;
+        SX126x.PacketParams.Params.Gfsk.DcFree = RADIO_DC_FREE_OFF;
+
+        RadioStandby( );
+        //RadioSetModem( ( SX126x.ModulationParams.PacketType == PACKET_TYPE_GFSK ) ? MODEM_FSK : MODEM_LORA );
+        //SX126xSetModulationParams( &SX126x.ModulationParams );
+        SX126xSetPacketParams( &SX126x.PacketParams );
+        //SX126xSetSyncWord( ( uint8_t[] ){ 0x2D, 0xD4, 0xC1, 0x00, 0x00, 0x00, 0x00, 0x00 } );
+        //SX126xSetWhiteningSeed( 0x01FF );
+            
+           
+
+       
+    
+
+    // WORKAROUND - Modulation Quality with 500 kHz LoRa Bandwidth, see DS_SX1261-2_V1.2 datasheet chapter 15.1
+        // SX126xWriteRegister( REG_TX_MODULATION, SX126xReadRegister( REG_TX_MODULATION ) | ( 1 << 2 ) );
+    // WORKAROUND END
+
+    // SX126xSetRfTxPower( power );
+    // TxTimeout = timeout;
 }
 
 bool RadioCheckRfFrequency( uint32_t frequency )

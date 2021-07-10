@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\common\bin\cspybat" -f "E:\stm32l476_sx126x\EWARM\settings\stm32l476_sx126x.stm32l476_sx126x.general.xcl" --backend -f "E:\stm32l476_sx126x\EWARM\settings\stm32l476_sx126x.stm32l476_sx126x.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\common\bin\cspybat" -f "E:\new_stm32l476_sx126x\EWARM\settings\stm32l476_sx126x.stm32l476_sx126x.general.xcl" --backend -f "E:\new_stm32l476_sx126x\EWARM\settings\stm32l476_sx126x.stm32l476_sx126x.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\common\bin\cspybat" -f "E:\stm32l476_sx126x\EWARM\settings\stm32l476_sx126x.stm32l476_sx126x.general.xcl" "--debug_file=%~1" --backend -f "E:\stm32l476_sx126x\EWARM\settings\stm32l476_sx126x.stm32l476_sx126x.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\common\bin\cspybat" -f "E:\new_stm32l476_sx126x\EWARM\settings\stm32l476_sx126x.stm32l476_sx126x.general.xcl" "--debug_file=%~1" --backend -f "E:\new_stm32l476_sx126x\EWARM\settings\stm32l476_sx126x.stm32l476_sx126x.driver.xcl" 
 
 @echo off 
 :end
