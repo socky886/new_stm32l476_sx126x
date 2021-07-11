@@ -78,6 +78,7 @@ volatile uint32_t FrequencyError = 0;
  */
 static bool ImageCalibrated = false;
 
+extern uint8_t xorbuf_rx[];
 /*!
  * \brief Get the number of PLL steps for a given frequency in Hertz
  *
@@ -151,13 +152,18 @@ void SX126xSetPayload( uint8_t *payload, uint8_t size )
 uint8_t SX126xGetPayload( uint8_t *buffer, uint8_t *size,  uint8_t maxSize )
 {
     uint8_t offset = 0;
-
+    int i;
     SX126xGetRxBufferStatus( size, &offset );
     if( *size > maxSize )
     {
         return 1;
     }
     SX126xReadBuffer( offset, buffer, *size );
+    for ( i = 0; i < *size; i++)
+    {
+        buffer[i]^=xorbuf_rx[i];
+    }
+    
     return 0;
 }
 
