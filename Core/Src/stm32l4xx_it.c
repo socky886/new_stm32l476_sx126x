@@ -181,16 +181,16 @@ void PendSV_Handler(void)
 /**
   * @brief This function handles System tick timer.
   */
-// void SysTick_Handler(void)
-// {
-//   /* USER CODE BEGIN SysTick_IRQn 0 */
+void SysTick_Handler(void)
+{
+  /* USER CODE BEGIN SysTick_IRQn 0 */
 
-//   /* USER CODE END SysTick_IRQn 0 */
-//   HAL_IncTick();
-//   /* USER CODE BEGIN SysTick_IRQn 1 */
+  /* USER CODE END SysTick_IRQn 0 */
+  HAL_IncTick();
+  /* USER CODE BEGIN SysTick_IRQn 1 */
 
-//   /* USER CODE END SysTick_IRQn 1 */
-// }
+  /* USER CODE END SysTick_IRQn 1 */
+}
 
 /******************************************************************************/
 /* STM32L4xx Peripheral Interrupt Handlers                                    */
@@ -208,7 +208,6 @@ void EXTI4_IRQHandler(void)
 
   /* USER CODE END EXTI4_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
-  // printf("-\n");
   /* USER CODE BEGIN EXTI4_IRQn 1 */
 
   /* USER CODE END EXTI4_IRQn 1 */
@@ -231,16 +230,16 @@ void EXTI15_10_IRQHandler(void)
 /**
   * @brief This function handles RTC alarm interrupt through EXTI line 18.
   */
-// void RTC_Alarm_IRQHandler(void)
-// {
-//   /* USER CODE BEGIN RTC_Alarm_IRQn 0 */
+void RTC_Alarm_IRQHandler(void)
+{
+  /* USER CODE BEGIN RTC_Alarm_IRQn 0 */
 
-//   /* USER CODE END RTC_Alarm_IRQn 0 */
-//   HAL_RTC_AlarmIRQHandler(&hrtc);
-//   /* USER CODE BEGIN RTC_Alarm_IRQn 1 */
+  /* USER CODE END RTC_Alarm_IRQn 0 */
+  HAL_RTC_AlarmIRQHandler(&hrtc);
+  /* USER CODE BEGIN RTC_Alarm_IRQn 1 */
 
-//   /* USER CODE END RTC_Alarm_IRQn 1 */
-// }
+  /* USER CODE END RTC_Alarm_IRQn 1 */
+}
 
 /* USER CODE BEGIN 1 */
 

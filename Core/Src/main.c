@@ -49,7 +49,7 @@ SPI_HandleTypeDef hspi1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+uint8_t g_nOpMode=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -74,6 +74,14 @@ int fputc(int ch, FILE *f)
 }
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+  if(GPIO_Pin==GPIO_PIN_13)
+  {
+    if(g_nOpMode==0)
+      g_nOpMode=1;
+    else
+      g_nOpMode=0;
+  }
+
   // printf("IRQ\n");
 }
 /* USER CODE END 0 */
@@ -130,19 +138,32 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    // tx packet
+    if(g_nOpMode==0)
+    {
+      printf("tx packet\n");
+      fix_lenth_packet_tx_crc_whiten();
+      HAL_Delay(200);
+    }
+
+    if(g_nOpMode==1)
+    {
+      printf("rx packet\n");
+      packet_rx();
+    }
     // register_test();
     // printf("transmit packet\n");
     // packet_tx();
-    fix_lenth_packet_tx_crc_whiten();
+    //fix_lenth_packet_tx_crc_whiten();
     // crc=crc16(xx,10);
     // printf("the crc is 0x%02x, 0x%02x\n",crc>>8,crc&0xff);
-    HAL_Delay(200);
+    //HAL_Delay(200);
     // for(i=2000;i<=65535;i++)
     // {
     //   printf("the seed is %d\n",i);
     //   SX126xSetWhiteningSeed( i );
 
-      packet_rx();
+    //  packet_rx();
     // }
     // while(1);
     // fix_len_packet_rx();
@@ -395,7 +416,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_RX_Pin LED_TX_Pin */

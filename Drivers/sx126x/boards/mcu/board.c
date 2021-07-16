@@ -522,11 +522,11 @@ void SystemClockReConfig( void )
     CRITICAL_SECTION_END( );
 }
 
-void SysTick_Handler( void )
-{
-    HAL_IncTick( );
-    HAL_SYSTICK_IRQHandler( );
-}
+// void SysTick_Handler( void )
+// {
+//     HAL_IncTick( );
+//     HAL_SYSTICK_IRQHandler( );
+// }
 
 uint8_t GetBoardPowerSource( void )
 {

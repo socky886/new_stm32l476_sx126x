@@ -517,19 +517,20 @@ void packet_rx(void)
             //     //     break;
             //     // }
             // }
-            printf("\r\nthe rewhiten payload is:");
 
-             for (i = 0; i < size; i++)
-            {
-                 //printf("0x%02x  ",rxbuf[i]^g_xordata[i]);
-                 printf("0x%02x, ",rxbuf[i]^xorbuf_rx[i]);
-                // if(rxbuf[i]!=xx[i])
-                // {
-                //     printf("-------------------------------error------------------------\r\n");
-                //     break;
-                // }
-            }
-            printf("\r\n");
+            // printf("\r\nthe rewhiten payload is:");
+
+            //  for (i = 0; i < size; i++)
+            // {
+            //      //printf("0x%02x  ",rxbuf[i]^g_xordata[i]);
+            //      printf("0x%02x, ",rxbuf[i]^xorbuf_rx[i]);
+            //     // if(rxbuf[i]!=xx[i])
+            //     // {
+            //     //     printf("-------------------------------error------------------------\r\n");
+            //     //     break;
+            //     // }
+            // }
+            // printf("\r\n");
 
 
             // printf("\r");
