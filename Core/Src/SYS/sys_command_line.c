@@ -133,9 +133,11 @@ uint8_t nic_reset_pFun(void * p, uint8_t len)
  * @return uint8_t 
  */
 extern void packet_init(void);
+extern uint8_t g_nOpMode;
 uint8_t cli_reset_sx126x(void * p, uint8_t len)
 {
     PRINTF("reset the sx126x\n");
+    g_nOpMode=0;
     packet_init();
     return 0x00;
 }
