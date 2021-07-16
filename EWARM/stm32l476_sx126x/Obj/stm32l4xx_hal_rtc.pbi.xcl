@@ -24,6 +24,10 @@ E:\new_stm32l476_sx126x\EWARM/../Drivers/sx126x/boards/mcu
 -I
 E:\new_stm32l476_sx126x\EWARM/../Drivers/lora
 -I
+E:\new_stm32l476_sx126x\EWARM\..\Core\Src\SYS
+-I
+E:\new_stm32l476_sx126x\EWARM\..\Core\Src\APP
+-I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\arm\inc\c
@@ -49,6 +53,10 @@ E:\new_stm32l476_sx126x\Drivers\sx126x\boards
 E:\new_stm32l476_sx126x\Drivers\sx126x\boards\mcu
 -I
 E:\new_stm32l476_sx126x\Drivers\lora
+-I
+E:\new_stm32l476_sx126x\Core\Src\SYS
+-I
+E:\new_stm32l476_sx126x\Core\Src\APP
 -DUSE_HAL_DRIVER=1
 -DSTM32L476xx=1
 -D__CHAR_BITS__=8

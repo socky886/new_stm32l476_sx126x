@@ -23,8 +23,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
-
 #include "lora.h"
+#include "sys_queue.h"
+#include "sys_command_line.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,6 +51,7 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint8_t g_nOpMode=0;
+uint8_t rx_buffer[2];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -83,6 +85,25 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   }
 
   // printf("IRQ\n");
+}
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+
+  /* save char */
+  if (huart == &huart2)
+  {
+
+    QUEUE_IN(cli_rx_buff, rx_buffer[0]);
+
+    HAL_UART_Receive_IT(&huart2, rx_buffer, 1);
+    // uUserTick = 0;
+  }
+
+  // if (huart == &huart1)
+  // {
+  //   Modbus_Master_Rece_Handler();
+  //   HAL_UART_Receive_IT(&huart1, rx_buffer1, 1);
+  // }
 }
 /* USER CODE END 0 */
 
@@ -130,6 +151,8 @@ int main(void)
   MX_USART2_UART_Init();
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
+  HAL_UART_Receive_IT(&huart2, rx_buffer, 1);
+  CLI_INIT(CLI_BAUDRATE);
   packet_init();
   // tx_cw();
   /* USER CODE END 2 */
@@ -139,6 +162,8 @@ int main(void)
   while (1)
   {
     // tx packet
+    CLI_RUN();
+    // HAL_Delay(50);
     if(g_nOpMode==0)
     {
       printf("tx packet\n");

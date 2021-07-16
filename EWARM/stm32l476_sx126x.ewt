@@ -1185,6 +1185,18 @@
   <group>
     <name>Drivers</name>
     <group>
+      <name>cli</name>
+      <file>
+        <name>$PROJ_DIR$\..\Core\Src\APP\app_led.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\Core\Src\SYS\sys_command_line.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\Core\Src\SYS\sys_queue.c</name>
+      </file>
+    </group>
+    <group>
       <name>CMSIS</name>
       <file>
         <name>$PROJ_DIR$\..\Core\Src\system_stm32l4xx.c</name>
